@@ -82,8 +82,12 @@ public class VehicleService {
 
 
     public void updateVehicles(Vehicle vehicle) {
+        Optional<Vehicle> vehicleById = vehicleRepository.findById(vehicle.getId());
+          vehicleById.get().setMake(vehicle.getMake());
+          vehicleById.get().setYear(vehicle.getYear());
+          vehicleById.get().setModel(vehicle.getModel());
 
-        vehicleRepository.save(vehicle);
+          vehicleRepository.save(vehicleById.get());
     }
 
     public void deleteVehiclesById(int id) {

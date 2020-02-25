@@ -59,7 +59,7 @@ public class VehicleController {
     }
 
 
-    @PutMapping(value = "vehilces" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle){
 
