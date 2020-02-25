@@ -71,18 +71,17 @@ public class VehicleService {
     }
 
     public void createVehicles(Vehicle vehicle) {
-        vehicle.setId(vehicle.getId());
-        vehicle.setMake(vehicle.getMake());
-        vehicle.setModel(vehicle.getModel());
-        vehicle.setYear(vehicle.getYear());
-
-        vehicleRepository.save(vehicle);
+        Vehicle vehicleObject = new Vehicle();
+        vehicleObject.setId(vehicle.getId());
+        vehicleObject.setMake(vehicle.getMake());
+        vehicleObject.setModel(vehicle.getModel());
+        vehicleObject.setYear(vehicle.getYear());
+        vehicleRepository.save(vehicleObject);
     }
 
 
 
     public void updateVehicles(Vehicle vehicle) {
-
 
         vehicleRepository.save(vehicle);
     }

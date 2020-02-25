@@ -70,10 +70,10 @@ public class VehicleController {
 
 
     @DeleteMapping(value = "vehicles/{Id}")
-    public ResponseEntity deleteVehicleById(@PathVariable("Id") int Id){
+    public void  deleteVehicleById(@PathVariable("Id") int Id){
 
           vehicleService.deleteVehiclesById(Id);
-        return null;
+        return ;
     }
 
 
