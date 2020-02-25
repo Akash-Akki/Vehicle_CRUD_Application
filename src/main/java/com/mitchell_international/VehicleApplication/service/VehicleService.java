@@ -52,6 +52,7 @@ public class VehicleService {
     public JsonNode getVehicleById(int id) throws JsonProcessingException {
         Optional<Vehicle> vehicleName = vehicleRepository.findById(id);
         Vehicle vehicleObject = new Vehicle();
+        vehicleObject.setId(vehicleName.get().getId());
         vehicleObject.setModel(vehicleName.get().getModel());
         vehicleObject.setYear(vehicleName.get().getYear());
         vehicleObject.setMake(vehicleName.get().getMake());
