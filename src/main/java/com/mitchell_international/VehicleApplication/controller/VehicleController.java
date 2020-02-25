@@ -15,6 +15,22 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+/*    TODO
+*register for machine learning exam
+* Add exception in create update nd delete
+  Unit testing
+  Add swagger documentation
+  Refactor code
+  See about component creating two models
+  update meaningful variable and method names
+  add google styling
+  validation
+  Make datasamples to store it in tempororary files
+  Check HTtp Status code for delete
+  Add Java Docs
+
+  *
+ */
 @RestController
 public class VehicleController {
 
@@ -48,32 +64,28 @@ public class VehicleController {
          return  new ResponseEntity<JsonNode>(vehicleById,HttpStatus.OK);
     }
 
-
     @PostMapping(value = "vehicles",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity createVehicle(@Valid @RequestBody Vehicle vehicle){
 
         vehicleService.createVehicles(vehicle);
 
-       return null;
+       return new ResponseEntity("vehicle table created",HttpStatus.CREATED);
     }
-
 
     @PutMapping(value = "vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle){
 
         vehicleService.updateVehicles(vehicle);
-
-        return null;
+        return new ResponseEntity("vehicle table updated",HttpStatus.CREATED);
     }
 
-
     @DeleteMapping(value = "vehicles/{Id}")
-    public void  deleteVehicleById(@PathVariable("Id") int Id){
+    public ResponseEntity<String> deleteVehicleById(@PathVariable("Id") int Id){
 
-          vehicleService.deleteVehiclesById(Id);
-        return ;
+        vehicleService.deleteVehiclesById(Id);
+        return new ResponseEntity<>("Vehicle object deleted",HttpStatus.NO_CONTENT);
     }
 
 
