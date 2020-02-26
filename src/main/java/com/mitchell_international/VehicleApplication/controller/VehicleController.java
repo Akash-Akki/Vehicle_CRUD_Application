@@ -26,7 +26,6 @@ import java.util.List;
   add google styling
   validation
   Make datasamples to store it in tempororary files
-  Check HTtp Status code for delete
   Add Java Docs
 
   *

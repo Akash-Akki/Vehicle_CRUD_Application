@@ -22,7 +22,7 @@ public class VehicleService {
     VehicleRepository vehicleRepository;
 
     public List<JsonNode> getVehicles() throws JsonProcessingException {
-        Iterable<Vehicle> all = vehicleRepository.findAll();
+        List<Vehicle> all = (List<Vehicle>) vehicleRepository.findAll();
         if(all==null)
             throw new VehiclesNotFoundException("No Vehicles found");
 
@@ -46,7 +46,7 @@ public class VehicleService {
         Optional<Vehicle> vehicleName = vehicleRepository.findById(id);
 
        if(!vehicleName.isPresent())
-           throw new  VehicleNotFoundException("vehicle with id"+id+"does not exist");
+           throw new  VehicleNotFoundException("vehicle with id "+id+" does not exist");
         Vehicle vehicleObject = new Vehicle();
         vehicleObject.setId(vehicleName.get().getId());
         vehicleObject.setModel(vehicleName.get().getModel());
@@ -64,21 +64,16 @@ public class VehicleService {
 
     }
 
-    public void createVehicles(Vehicle vehicle) {
-        Vehicle vehicleObject = new Vehicle();
+    public Vehicle createVehicles(Vehicle vehicle) {
 
+        Vehicle entity = vehicleRepository.save(vehicle);
+        return entity;
 
-        vehicleObject.setId(vehicle.getId());
-        vehicleObject.setMake(vehicle.getMake());
-        vehicleObject.setModel(vehicle.getModel());
-        vehicleObject.setYear(vehicle.getYear());
-
-        vehicleRepository.save(vehicleObject);
     }
 
 
 
-    public void updateVehicles(Vehicle vehicle) {
+    public Vehicle updateVehicles(Vehicle vehicle) {
         Optional<Vehicle> vehicleById = vehicleRepository.findById(vehicle.getId());
         if(!vehicleById.isPresent())
             throw new VehicleNotFoundException("Vehicle Not found");
@@ -86,7 +81,8 @@ public class VehicleService {
           vehicleById.get().setMake(vehicle.getMake());
           vehicleById.get().setYear(vehicle.getYear());
           vehicleById.get().setModel(vehicle.getModel());
-          vehicleRepository.save(vehicleById.get());
+        Vehicle updatedEntity=vehicleRepository.save(vehicleById.get());
+        return updatedEntity;
     }
 
     public void deleteVehiclesById(int id) {
@@ -94,7 +90,7 @@ public class VehicleService {
         if(vehicleById.isPresent())
             vehicleRepository.deleteById(id);
         else
-            throw new VehicleNotFoundException("Vehicle with this id "+id+"not found");
+            throw new VehicleNotFoundException("Vehicle with this id "+id+" not found");
 
     }
 }

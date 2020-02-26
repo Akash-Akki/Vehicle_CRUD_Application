@@ -23,6 +23,17 @@ public class Vehicle implements Serializable {
     @Column(name="Model")
     private String Model;
 
+    public Vehicle(int id, int year, String make, String model) {
+        this.Id =id;
+        this.Year=year;
+        this.Make=make;
+        this.Model=model;
+    }
+
+    public Vehicle() {
+
+    }
+
     public int getId() {
         return Id;
     }
