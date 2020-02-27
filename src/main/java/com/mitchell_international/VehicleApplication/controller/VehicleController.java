@@ -1,8 +1,10 @@
 package com.mitchell_international.VehicleApplication.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitchell_international.VehicleApplication.Exception.*;
 import com.mitchell_international.VehicleApplication.Exception.VehiclesNotFoundException;
+import com.mitchell_international.VehicleApplication.model.Response;
 import com.mitchell_international.VehicleApplication.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,9 +41,10 @@ public class VehicleController {
     @GetMapping(value="/vehicles" , produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getVehicles() throws JsonProcessingException {
         List<JsonNode> vehiclesList = new ArrayList<>();
-        System.out.println("in vehicles controller------");
+
         try {
             vehiclesList = vehicleService.getVehicles();
+
         }
         catch (VehiclesNotFoundException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
@@ -63,28 +66,36 @@ public class VehicleController {
          return  new ResponseEntity<JsonNode>(vehicleById,HttpStatus.OK);
     }
 
-    @PostMapping(value = "vehicles",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/vehicles",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity createVehicle(@Valid @RequestBody Vehicle vehicle){
+    public ResponseEntity createVehicle(@Valid @RequestBody Vehicle vehicle) throws JsonProcessingException {
 
-        vehicleService.createVehicles(vehicle);
+        Vehicle vehicleObject = vehicleService.createVehicles(vehicle);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);
+        JsonNode vehicleJsonObject = objectMapper.readTree(vehicleObjectJsonString);
 
-       return new ResponseEntity("vehicle table created",HttpStatus.CREATED);
+        return new ResponseEntity<JsonNode>(vehicleJsonObject,HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle){
+    public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle) throws JsonProcessingException {
 
-        vehicleService.updateVehicles(vehicle);
-        return new ResponseEntity("vehicle table updated",HttpStatus.CREATED);
+        Vehicle vehicleObject =  vehicleService.updateVehicles(vehicle);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);
+        JsonNode vehicleJsonObject = objectMapper.readTree(vehicleObjectJsonString);
+
+        return new ResponseEntity<JsonNode>(vehicleJsonObject,HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "vehicles/{Id}")
-    public ResponseEntity<String> deleteVehicleById(@PathVariable("Id") int Id){
+    @DeleteMapping(value = "/vehicles/{Id}")
+    public ResponseEntity<Response> deleteVehicleById(@PathVariable("Id") int Id){
 
         vehicleService.deleteVehiclesById(Id);
-        return new ResponseEntity<>("Vehicle object deleted",HttpStatus.NO_CONTENT);
+        return new ResponseEntity<Response>(new Response(HttpStatus.NO_CONTENT.value(), "Vehicle has been deleted"),
+                HttpStatus.NO_CONTENT);
     }
 
 

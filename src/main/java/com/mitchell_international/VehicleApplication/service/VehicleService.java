@@ -22,10 +22,10 @@ public class VehicleService {
     VehicleRepository vehicleRepository;
 
     public List<JsonNode> getVehicles() throws JsonProcessingException {
+
         List<Vehicle> all = (List<Vehicle>) vehicleRepository.findAll();
         if(all==null)
             throw new VehiclesNotFoundException("No Vehicles found");
-
         Vehicle vehicleObject = new Vehicle();
         List<Vehicle> vehicleList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();

@@ -7,20 +7,17 @@ import com.mitchell_international.VehicleApplication.model.Vehicle;
 import com.mitchell_international.VehicleApplication.repository.VehicleRepository;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class VehicleServiceTest {
@@ -112,7 +109,6 @@ public class VehicleServiceTest {
             assertEquals("No Vehicles found",e.getMessage());
         }
         catch (JsonProcessingException e){
-
         }
     }
 
@@ -164,14 +160,4 @@ public class VehicleServiceTest {
         }
 
     }
-
-
-
-
-
-
-
-
-
-
 }
