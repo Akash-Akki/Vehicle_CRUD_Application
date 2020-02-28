@@ -3,8 +3,6 @@ package com.mitchell_international.VehicleApplication.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitchell_international.VehicleApplication.Exception.VehicleNotFoundException;
 import com.mitchell_international.VehicleApplication.Exception.VehiclesNotFoundException;
 import com.mitchell_international.VehicleApplication.repository.VehicleRepository;
@@ -22,7 +20,9 @@ public class VehicleService {
     @Autowired
     VehicleRepository vehicleRepository;
 
-    public List<JsonNode> getVehicles(HashMap<String, String> requestParam) throws JsonProcessingException, VehiclesNotFoundException {
+
+
+    public List<Vehicle> getVehicles(HashMap<String, String> requestParam) throws  VehiclesNotFoundException {
         List<Vehicle> vehicleList = new ArrayList<>();
         if(requestParam.containsKey("make"))
             vehicleList  = vehicleRepository.findByMakeAllIgnoreCase(requestParam.get("make"));
@@ -34,43 +34,20 @@ public class VehicleService {
         if(vehicleList==null)
             throw new VehiclesNotFoundException("No Vehicles found");
 
-        Vehicle vehicleObject = new Vehicle();
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<JsonNode> jsonNodeList = new ArrayList<>();
-        for(Vehicle vehicle : vehicleList){
-            vehicleObject.setId(vehicle.getId());
-            System.out.println(vehicle.getMake());
-            vehicleObject.setMake(vehicle.getMake());
-            vehicleObject.setModel(vehicle.getModel());
-            vehicleObject.setYear(vehicle.getYear());
-            String stocksListJsonString = objectMapper.writeValueAsString(vehicleObject);
-            JsonNode jsonNode = objectMapper.readTree(stocksListJsonString);
-            jsonNodeList.add(jsonNode);
-        }
-        return jsonNodeList;
+        return vehicleList;
     }
 
-    public JsonNode getVehicleById(int id) throws JsonProcessingException,VehicleNotFoundException{
+    public Optional<Vehicle> getVehicleById(int id) throws VehicleNotFoundException{
 
-        Optional<Vehicle> vehicleName = vehicleRepository.findById(id);
+        Optional<Vehicle> vehicleById = vehicleRepository.findById(id);
 
-       if(!vehicleName.isPresent())
+       if(!vehicleById.isPresent())
            throw new  VehicleNotFoundException("vehicle with id " + id+" not found");
-        Vehicle vehicleObject = new Vehicle();
-        vehicleObject.setId(vehicleName.get().getId());
-        vehicleObject.setModel(vehicleName.get().getModel());
-        vehicleObject.setYear(vehicleName.get().getYear());
-        vehicleObject.setMake(vehicleName.get().getMake());
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);
-        JsonNode vehicleJsonObject = objectMapper.readTree(vehicleObjectJsonString);
-
-        return vehicleJsonObject;
+        return vehicleById;
     }
 
     public Vehicle createVehicles(Vehicle vehicle) {
-
         Vehicle entity = vehicleRepository.save(vehicle);
         return entity;
 
@@ -79,13 +56,11 @@ public class VehicleService {
 
 
     public Vehicle updateVehicles(Vehicle vehicle) throws VehicleNotFoundException {
+
         Optional<Vehicle> vehicleById = vehicleRepository.findById(vehicle.getId());
-        System.out.println("here after exception thrown");
         if(!vehicleById.isPresent()) {
-            System.out.println("here in update vehicle not found exception");
-            throw new VehicleNotFoundException("Vehicle with this " + vehicleById.get().getId() + " Not found");
+            throw new VehicleNotFoundException("Vehicle with id " + vehicle.getId() + " Not found");
         }
-          System.out.println("here after exception thrown");
           vehicleById.get().setMake(vehicle.getMake());
           vehicleById.get().setYear(vehicle.getYear());
           vehicleById.get().setModel(vehicle.getModel());

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitchell_international.VehicleApplication.Exception.*;
 import com.mitchell_international.VehicleApplication.Exception.VehiclesNotFoundException;
+
+import com.mitchell_international.VehicleApplication.VehicleValidator.VehicleValidator;
 import com.mitchell_international.VehicleApplication.model.Response;
 import com.mitchell_international.VehicleApplication.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 /*    TODO
 *register for machine learning exam
@@ -40,65 +43,47 @@ public class VehicleController {
 
    @Autowired
    VehicleService vehicleService;
+   @Autowired
+    VehicleValidator vehicleValidator;
+
 
     @GetMapping(value="/vehicles" , produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getVehicles(@RequestParam HashMap <String,String> requestParam ) throws JsonProcessingException, VehiclesNotFoundException {
-        List<JsonNode> vehiclesList = new ArrayList<>();
-            vehiclesList = vehicleService.getVehicles(requestParam);
+    public ResponseEntity getVehicles(@RequestParam HashMap <String,String> requestParam ) throws  VehiclesNotFoundException {
+        List<Vehicle> vehiclesList = new ArrayList<Vehicle>();
+        vehiclesList = vehicleService.getVehicles(requestParam);
             if (vehiclesList==null || vehiclesList.size()==0)
                throw new VehiclesNotFoundException("No Vehicles found");
-
-        return new ResponseEntity<List<JsonNode>>(vehiclesList,HttpStatus.OK);
+        return new ResponseEntity<List<Vehicle>>(vehiclesList,HttpStatus.OK);
 
     }
 
     @GetMapping(value="/vehicles/{Id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity getVehicleById(@PathVariable("Id") int Id) throws VehicleNotFoundException,JsonProcessingException {
-        JsonNode vehicleById;
-        System.out.println(" here1");
-           vehicleById= vehicleService.getVehicleById(Id);
+    public  ResponseEntity getVehicleById(@PathVariable("Id") int Id) throws VehicleNotFoundException {
+         Optional<Vehicle> vehicleById= vehicleService.getVehicleById(Id);
            System.out.println("vehcile"+vehicleById);
-          if(vehicleById.isNull()) {
+          if(!vehicleById.isPresent()) {
               throw new VehicleNotFoundException();
           }
-         return  new ResponseEntity<JsonNode>(vehicleById,HttpStatus.OK);
+         return  new ResponseEntity<Optional<Vehicle>>(vehicleById,HttpStatus.OK);
     }
 
     @PostMapping(value = "/vehicles",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity createVehicle(@Valid @RequestBody Vehicle vehicle) throws JsonProcessingException {
+    public ResponseEntity createVehicle(@RequestBody Vehicle vehicle) throws InputValidationException {
 
+        vehicleValidator.validateForCreate(vehicle);
         Vehicle vehicleObject = vehicleService.createVehicles(vehicle);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);
-        JsonNode vehicleJsonObject = objectMapper.readTree(vehicleObjectJsonString);
-
-        return new ResponseEntity<JsonNode>(vehicleJsonObject,HttpStatus.CREATED);
+        return new ResponseEntity<Vehicle>(vehicleObject,HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle) throws JsonProcessingException, VehicleNotFoundException {
-
-
-        System.out.println("here before throwing exception");
+    public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle) throws InputValidationException, VehicleNotFoundException {
         Vehicle vehicleObject = vehicleService.updateVehicles(vehicle);
-        System.out.println("here ater throwing exception");
-        System.out.println(vehicleObject);
-        System.out.println("here");
-        if(vehicleObject==null)
-             throw new VehicleNotFoundException("dfghjk");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);
-        JsonNode vehicleJsonObject = objectMapper.readTree(vehicleObjectJsonString);
-
-        return new ResponseEntity<JsonNode>(vehicleJsonObject,HttpStatus.CREATED);
+        return new ResponseEntity<Vehicle>(vehicleObject,HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/vehicles/{Id}")
     public ResponseEntity<Response> deleteVehicleById(@PathVariable("Id") int Id) throws VehicleNotFoundException {
-
         vehicleService.deleteVehiclesById(Id);
         return new ResponseEntity<Response>(new Response(HttpStatus.NO_CONTENT.value(), "Vehicle has been deleted"),
                 HttpStatus.NO_CONTENT);

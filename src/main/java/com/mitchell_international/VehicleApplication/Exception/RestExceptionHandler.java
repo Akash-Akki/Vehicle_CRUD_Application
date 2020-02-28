@@ -1,5 +1,6 @@
 package com.mitchell_international.VehicleApplication.Exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +24,13 @@ public class RestExceptionHandler  {
         return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = InputValidationException.class)
+    public final ResponseEntity<ValidationErrors> hanldeValidationError(
+            InputValidationException inputValidationException) {
+
+        return new ResponseEntity<>(inputValidationException.getErrors(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value=VehiclesNotFoundException.class)
     public ResponseEntity<ErrorResponse> exceptionVehicleListHandler(Exception ex) {
         ErrorResponse error = new ErrorResponse();
@@ -30,6 +38,7 @@ public class RestExceptionHandler  {
         error.setMessage(ex.getMessage());
         return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
     }
+
 
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
