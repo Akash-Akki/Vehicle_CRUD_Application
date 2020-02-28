@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import  com.mitchell_international.VehicleApplication.model.Vehicle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +22,12 @@ public class VehicleService {
     @Autowired
     VehicleRepository vehicleRepository;
 
-    public List<JsonNode> getVehicles(String make) throws JsonProcessingException, VehiclesNotFoundException {
+    public List<JsonNode> getVehicles(HashMap<String, String> requestParam) throws JsonProcessingException, VehiclesNotFoundException {
         List<Vehicle> vehicleList = new ArrayList<>();
-        if(make!=null || !make.isEmpty())
-            vehicleList  = vehicleRepository.findByMakeAllIgnoreCase(make);
+        if(requestParam.containsKey("make"))
+            vehicleList  = vehicleRepository.findByMakeAllIgnoreCase(requestParam.get("make"));
+       else if(requestParam.containsKey("model"))
+           vehicleList = vehicleRepository.findByModelAllIgnoreCase(requestParam.get("model"));
        else
            vehicleList= (List<Vehicle>) vehicleRepository.findAll();
 

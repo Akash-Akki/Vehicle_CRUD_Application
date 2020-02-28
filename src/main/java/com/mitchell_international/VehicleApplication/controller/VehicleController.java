@@ -16,6 +16,7 @@ import com.mitchell_international.VehicleApplication.model.Vehicle;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /*    TODO
@@ -41,9 +42,9 @@ public class VehicleController {
    VehicleService vehicleService;
 
     @GetMapping(value="/vehicles" , produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getVehicles(@RequestParam(name="make",required=false) String make ) throws JsonProcessingException, VehiclesNotFoundException {
+    public ResponseEntity getVehicles(@RequestParam HashMap <String,String> requestParam ) throws JsonProcessingException, VehiclesNotFoundException {
         List<JsonNode> vehiclesList = new ArrayList<>();
-            vehiclesList = vehicleService.getVehicles(make);
+            vehiclesList = vehicleService.getVehicles(requestParam);
             if (vehiclesList==null || vehiclesList.size()==0)
                throw new VehiclesNotFoundException("No Vehicles found");
 

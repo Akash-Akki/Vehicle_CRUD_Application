@@ -27,13 +27,13 @@ public class Vehicle implements Serializable {
 
     @Column(name="Model")
     @NotEmpty
-    private String Model;
+    private String model;
 
     public Vehicle(int id, int year, String make, String model) {
         this.Id =id;
         this.Year=year;
         this.make=make;
-        this.Model=model;
+        this.model =model;
     }
 
     public Vehicle() {
@@ -65,10 +65,10 @@ public class Vehicle implements Serializable {
     }
 
     public String getModel() {
-        return Model;
+        return model;
     }
 
     public void setModel(String model) {
-        Model = model;
+        this.model = model;
     }
 }
