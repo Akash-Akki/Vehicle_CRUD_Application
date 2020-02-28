@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.mitchell_international.VehicleApplication.model.Vehicle;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +41,9 @@ public class VehicleController {
    VehicleService vehicleService;
 
     @GetMapping(value="/vehicles" , produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getVehicles() throws JsonProcessingException, VehiclesNotFoundException {
+    public ResponseEntity getVehicles(@RequestParam(name="make",required=false) String make ) throws JsonProcessingException, VehiclesNotFoundException {
         List<JsonNode> vehiclesList = new ArrayList<>();
-
-
-            vehiclesList = vehicleService.getVehicles();
+            vehiclesList = vehicleService.getVehicles(make);
             if (vehiclesList==null || vehiclesList.size()==0)
                throw new VehiclesNotFoundException("No Vehicles found");
 
@@ -53,14 +52,14 @@ public class VehicleController {
     }
 
     @GetMapping(value="/vehicles/{Id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity getVehicleById(@PathVariable("Id") int Id) throws JsonProcessingException, VehicleNotFoundException ,Exception{
+    public  ResponseEntity getVehicleById(@PathVariable("Id") int Id) throws VehicleNotFoundException,JsonProcessingException {
         JsonNode vehicleById;
         System.out.println(" here1");
            vehicleById= vehicleService.getVehicleById(Id);
            System.out.println("vehcile"+vehicleById);
-//          if(vehicleById==null) {
-//              throw new VehicleNotFoundException();
-//          }
+          if(vehicleById.isNull()) {
+              throw new VehicleNotFoundException();
+          }
          return  new ResponseEntity<JsonNode>(vehicleById,HttpStatus.OK);
     }
 
@@ -69,6 +68,7 @@ public class VehicleController {
     public ResponseEntity createVehicle(@Valid @RequestBody Vehicle vehicle) throws JsonProcessingException {
 
         Vehicle vehicleObject = vehicleService.createVehicles(vehicle);
+
         ObjectMapper objectMapper = new ObjectMapper();
         String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);
         JsonNode vehicleJsonObject = objectMapper.readTree(vehicleObjectJsonString);
@@ -79,9 +79,14 @@ public class VehicleController {
     @PutMapping(value = "/vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle) throws JsonProcessingException, VehicleNotFoundException {
 
+
+        System.out.println("here before throwing exception");
         Vehicle vehicleObject = vehicleService.updateVehicles(vehicle);
+        System.out.println("here ater throwing exception");
+        System.out.println(vehicleObject);
+        System.out.println("here");
         if(vehicleObject==null)
-             throw new VehicleNotFoundException();
+             throw new VehicleNotFoundException("dfghjk");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);

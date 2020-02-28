@@ -1,9 +1,12 @@
 package com.mitchell_international.VehicleApplication.model;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Entity
@@ -15,18 +18,21 @@ public class Vehicle implements Serializable {
     private int Id;
 
     @Column(name="Year")
+    @Range(min = 1951,max=2049)
     private  int Year;
 
     @Column(name="Make")
-    private String Make;
+    @NotEmpty
+    private String make;
 
     @Column(name="Model")
+    @NotEmpty
     private String Model;
 
     public Vehicle(int id, int year, String make, String model) {
         this.Id =id;
         this.Year=year;
-        this.Make=make;
+        this.make=make;
         this.Model=model;
     }
 
@@ -51,11 +57,11 @@ public class Vehicle implements Serializable {
     }
 
     public String getMake() {
-        return Make;
+        return make;
     }
 
     public void setMake(String make) {
-        Make = make;
+        this.make = make;
     }
 
     public String getModel() {
