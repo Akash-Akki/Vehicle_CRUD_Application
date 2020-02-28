@@ -21,7 +21,7 @@ public class VehicleService {
     @Autowired
     VehicleRepository vehicleRepository;
 
-    public List<JsonNode> getVehicles() throws JsonProcessingException {
+    public List<JsonNode> getVehicles() throws JsonProcessingException, VehiclesNotFoundException {
 
         List<Vehicle> all = (List<Vehicle>) vehicleRepository.findAll();
         if(all==null)
@@ -42,11 +42,11 @@ public class VehicleService {
         return jsonNodeList;
     }
 
-    public JsonNode getVehicleById(int id) throws JsonProcessingException {
+    public JsonNode getVehicleById(int id) throws JsonProcessingException,VehicleNotFoundException{
         Optional<Vehicle> vehicleName = vehicleRepository.findById(id);
 
        if(!vehicleName.isPresent())
-           throw new  VehicleNotFoundException("vehicle with id "+id+" does not exist");
+           throw new  VehicleNotFoundException("vehicle with id " + id+" not found");
         Vehicle vehicleObject = new Vehicle();
         vehicleObject.setId(vehicleName.get().getId());
         vehicleObject.setModel(vehicleName.get().getModel());
@@ -57,11 +57,7 @@ public class VehicleService {
         String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);
         JsonNode vehicleJsonObject = objectMapper.readTree(vehicleObjectJsonString);
 
-
-
         return vehicleJsonObject;
-
-
     }
 
     public Vehicle createVehicles(Vehicle vehicle) {
@@ -73,11 +69,13 @@ public class VehicleService {
 
 
 
-    public Vehicle updateVehicles(Vehicle vehicle) {
+    public Vehicle updateVehicles(Vehicle vehicle) throws VehicleNotFoundException {
         Optional<Vehicle> vehicleById = vehicleRepository.findById(vehicle.getId());
+        System.out.println("here after exception thrown");
         if(!vehicleById.isPresent())
-            throw new VehicleNotFoundException("Vehicle Not found");
+            throw new VehicleNotFoundException("Vehicle with this " +vehicleById.get().getId() +" Not found");
 
+          System.out.println("here after exception thrown");
           vehicleById.get().setMake(vehicle.getMake());
           vehicleById.get().setYear(vehicle.getYear());
           vehicleById.get().setModel(vehicle.getModel());
@@ -85,12 +83,13 @@ public class VehicleService {
         return updatedEntity;
     }
 
-    public void deleteVehiclesById(int id) {
+    public void deleteVehiclesById(int id) throws VehicleNotFoundException {
         Optional<Vehicle> vehicleById = vehicleRepository.findById(id);
         if(vehicleById.isPresent())
             vehicleRepository.deleteById(id);
-        else
-            throw new VehicleNotFoundException("Vehicle with this id "+id+" not found");
+        else {
+            throw new VehicleNotFoundException("Vehicle with this id " + id + " not found");
+        }
 
     }
 }

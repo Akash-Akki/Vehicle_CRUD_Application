@@ -3,6 +3,7 @@ package com.mitchell_international.VehicleApplication.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mitchell_international.VehicleApplication.Exception.VehicleNotFoundException;
+import com.mitchell_international.VehicleApplication.Exception.VehiclesNotFoundException;
 import com.mitchell_international.VehicleApplication.model.Vehicle;
 import com.mitchell_international.VehicleApplication.repository.VehicleRepository;
 import org.junit.Before;
@@ -14,12 +15,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class VehicleServiceTest {
 
     @InjectMocks
@@ -51,7 +54,7 @@ public class VehicleServiceTest {
     }
 
     @Test
-    public void shouldGetVehicleById() throws JsonProcessingException {
+    public void shouldGetVehicleById() throws JsonProcessingException, VehicleNotFoundException {
         Vehicle vehicle = new Vehicle();
         vehicle.setId(1);
         vehicle.setMake("MercedesBenz");
@@ -70,23 +73,23 @@ public class VehicleServiceTest {
        assertEquals("MercedesBenz",vehicle.getMake().toString());
     }
 
+
+//    public void shouldGetVehiclesByIdWithResultNotPresent(){
+//        Vehicle vehicle = new Vehicle(1,2018,"MercedesBenz","GClass");
+//        when(vehicleRepository.findById(1)).thenReturn(Optional.empty());
+//           try{
+//               vehicleService.getVehicleById(1);
+//           } catch (VehicleNotFoundException e) {
+//               assertEquals("vehicle with id 1 does not exist",e.getMessage());
+//           }
+//           catch ( JsonProcessingException e){
+//
+//           }
+//    }
+
+
     @Test
-    public void shouldGetVehiclesByIdWithResultNotPresent(){
-        Vehicle vehicle = new Vehicle(1,2018,"MercedesBenz","GClass");
-        when(vehicleRepository.findById(1)).thenReturn(Optional.empty());
-           try{
-               vehicleService.getVehicleById(1);
-           } catch (VehicleNotFoundException e) {
-               assertEquals("vehicle with id 1 does not exist",e.getMessage());
-           }
-           catch ( JsonProcessingException e){
-
-           }
-    }
-
-
-    @Test
-    public void shouldGetVehicles() throws JsonProcessingException {
+    public void shouldGetVehicles() throws JsonProcessingException, VehiclesNotFoundException {
 
         List<Vehicle> vehicleList = new ArrayList<Vehicle>();
         Vehicle vehcile = new Vehicle(1, 1918, "MerecedesBenz", "SClass");
@@ -105,7 +108,7 @@ public class VehicleServiceTest {
         try{
             List<JsonNode> vehicles = vehicleService.getVehicles();
         }
-        catch (VehicleNotFoundException  e){
+        catch (  VehiclesNotFoundException e){
             assertEquals("No Vehicles found",e.getMessage());
         }
         catch (JsonProcessingException e){
@@ -113,7 +116,7 @@ public class VehicleServiceTest {
     }
 
     @Test
-    public void shouldUpdateVehicles(){
+    public void shouldUpdateVehicles() throws VehicleNotFoundException {
         Vehicle vehicle=new Vehicle(1,2018,"MercedesBenz","GClass");
         when(vehicleRepository.findById(1)).thenReturn(java.util.Optional.of(vehicle));
         vehicle.setYear(2019);
@@ -137,7 +140,7 @@ public class VehicleServiceTest {
     }
 
     @Test
-    public void shouldDeleteVehiclesById(){
+    public void shouldDeleteVehiclesById() throws VehicleNotFoundException {
         Vehicle vehicle = new Vehicle();
         vehicle.setId(1);
         vehicle.setMake("MercedesBenz");

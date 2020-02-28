@@ -19,6 +19,7 @@ import java.util.List;
 
 /*    TODO
 *register for machine learning exam
+*Cover Controller
 * Add exception in create update nd delete
   Unit testing
   Add swagger documentation
@@ -39,30 +40,27 @@ public class VehicleController {
    VehicleService vehicleService;
 
     @GetMapping(value="/vehicles" , produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getVehicles() throws JsonProcessingException {
+    public ResponseEntity getVehicles() throws JsonProcessingException, VehiclesNotFoundException {
         List<JsonNode> vehiclesList = new ArrayList<>();
 
-        try {
-            vehiclesList = vehicleService.getVehicles();
 
-        }
-        catch (VehiclesNotFoundException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
-        }
+            vehiclesList = vehicleService.getVehicles();
+            if (vehiclesList==null || vehiclesList.size()==0)
+               throw new VehiclesNotFoundException("No Vehicles found");
+
         return new ResponseEntity<List<JsonNode>>(vehiclesList,HttpStatus.OK);
 
     }
 
     @GetMapping(value="/vehicles/{Id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public  ResponseEntity getVehicleById(@PathVariable("Id") int Id) throws JsonProcessingException {
+    public  ResponseEntity getVehicleById(@PathVariable("Id") int Id) throws JsonProcessingException, VehicleNotFoundException ,Exception{
         JsonNode vehicleById;
-        try {
+        System.out.println(" here1");
            vehicleById= vehicleService.getVehicleById(Id);
-        }
-        catch(VehicleNotFoundException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
-        }
+           System.out.println("vehcile"+vehicleById);
+//          if(vehicleById==null) {
+//              throw new VehicleNotFoundException();
+//          }
          return  new ResponseEntity<JsonNode>(vehicleById,HttpStatus.OK);
     }
 
@@ -79,10 +77,12 @@ public class VehicleController {
     }
 
     @PutMapping(value = "/vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle) throws JsonProcessingException {
+    public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle) throws JsonProcessingException, VehicleNotFoundException {
 
-        Vehicle vehicleObject =  vehicleService.updateVehicles(vehicle);
+        Vehicle vehicleObject = vehicleService.updateVehicles(vehicle);
+        if(vehicleObject==null)
+             throw new VehicleNotFoundException();
+
         ObjectMapper objectMapper = new ObjectMapper();
         String vehicleObjectJsonString = objectMapper.writeValueAsString(vehicleObject);
         JsonNode vehicleJsonObject = objectMapper.readTree(vehicleObjectJsonString);
@@ -91,7 +91,7 @@ public class VehicleController {
     }
 
     @DeleteMapping(value = "/vehicles/{Id}")
-    public ResponseEntity<Response> deleteVehicleById(@PathVariable("Id") int Id){
+    public ResponseEntity<Response> deleteVehicleById(@PathVariable("Id") int Id) throws VehicleNotFoundException {
 
         vehicleService.deleteVehiclesById(Id);
         return new ResponseEntity<Response>(new Response(HttpStatus.NO_CONTENT.value(), "Vehicle has been deleted"),

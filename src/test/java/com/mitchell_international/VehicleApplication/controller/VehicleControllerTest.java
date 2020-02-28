@@ -42,7 +42,7 @@ public class VehicleControllerTest {
     public void shouldGetAllVehicles() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/vehicles").accept(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2))).andDo(print());
+                .andExpect(jsonPath("$", hasSize(3))).andDo(print());
     }
 
     @Test
@@ -59,6 +59,13 @@ public class VehicleControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    public void shouldGetVehicleWithIdNotPresent() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/todo/0").accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.errorCode").value(404))
+                .andExpect(jsonPath("$.message").value("ToDo doesn´t exist"))
+                .andDo(print());
+    }
     @Test
     public void shouldCreateVehicles() throws Exception {
                 mockMvc.perform(MockMvcRequestBuilders.post("/vehicles")
@@ -82,13 +89,13 @@ public class VehicleControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/vehicles")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{ \"id\": \"2\", \"year\" : \"2019\",\"make\" : \"MercedesBenz\", \"model\" : \"GClass\" }")
+                .content("{ \"id\": \"3\", \"year\" : \"2019\",\"make\" : \"MercedesBenz\", \"model\" : \"GClass\" }")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.year").exists())
                 .andExpect(jsonPath("$.make").exists())
                 .andExpect(jsonPath("$.model").exists())
-                .andExpect(jsonPath("$.id").value("2"))
+                .andExpect(jsonPath("$.id").value("3"))
                 .andExpect(jsonPath("$.year").value("2019"))
                 .andExpect(jsonPath("$.make").value("MercedesBenz"))
                 .andExpect(jsonPath("$.model").value("GClass"))
@@ -97,7 +104,7 @@ public class VehicleControllerTest {
 
     @Test
     public void shouldDeleteVehicle() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/vehicles/2").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/vehicles/4").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(204))
                 .andExpect(jsonPath("$.message").value("Vehicle has been deleted"))
                 .andDo(print());
