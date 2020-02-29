@@ -35,11 +35,8 @@ public class VehicleValidator  {
 
         private void baseValidator(Vehicle vehicle){
             ValidationErrors errors = new ValidationErrors();
-            System.out.println("in vheicle validator");
-            if (StringUtils.isEmpty(vehicle.getModel())) {
-                System.out.println("model is required");
+            if (StringUtils.isEmpty(vehicle.getModel()))
                 errors.addSpecificError("model", "Model is required");
-            }
             if (StringUtils.isEmpty(vehicle.getMake()))
                 errors.addSpecificError("make", "Make is required");
             if(vehicle.getYear()>2050 || vehicle.getYear()<1950)

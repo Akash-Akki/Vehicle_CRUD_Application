@@ -25,7 +25,10 @@ import java.util.Optional;
 /*    TODO
 *register for machine learning exam
 *Cover Controller
-* Add exception in create update nd delete
+* junits modification
+* see delete why response is not coming when succesfully deleted
+* and then see about validation errors and input validation exception.
+*
   Unit testing
   Add swagger documentation
   Refactor code

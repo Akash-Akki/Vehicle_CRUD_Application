@@ -48,14 +48,14 @@ public class ValidationErrors implements Serializable {
         return specificErrors;
     }
 
-    public void setSpecificErrors(Map<String, String> errors) {
-        this.specificErrors = errors;
-    }
+//    public void setSpecificErrors(Map<String, String> errors) {
+//        this.specificErrors = errors;
+//    }
 
-    public void addErrorMessage(String error) {
-        this.errorAvailable = true;
-        this.errorMessages.add(error);
-    }
+//    public void addErrorMessage(String error) {
+//        this.errorAvailable = true;
+//        this.errorMessages.add(error);
+//    }
 
     public void addSpecificError(String key, String value) {
         this.errorAvailable = true;
