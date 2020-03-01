@@ -7,10 +7,10 @@ public class VehicleNotFoundException extends Exception {
         super(message);
     }
 
-    public VehicleNotFoundException() {
-        super();
-    }
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+//    public VehicleNotFoundException() {
+//        super();
+//    }
+//    public String getErrorMessage() {
+//        return errorMessage;
+//    }
 }

@@ -40,9 +40,9 @@ public class ValidationErrors implements Serializable {
         return errorMessages;
     }
 
-    public void setErrorMessages(List<String> errorMessages) {
-        this.errorMessages = errorMessages;
-    }
+//    public void setErrorMessages(List<String> errorMessages) {
+//        this.errorMessages = errorMessages;
+//    }
 
     public Map<String, String> getSpecificErrors() {
         return specificErrors;
@@ -70,10 +70,10 @@ public class ValidationErrors implements Serializable {
         this.errorAvailable = errorAvailable;
     }
 
-    @Override
-    public String toString() {
-        return "ValidationErrors [errorMessages=" + errorMessages + ", specificErrors=" + specificErrors
-                + ", errorAvailable=" + errorAvailable + "]";
-    }
+//    @Override
+//    public String toString() {
+//        return "ValidationErrors [errorMessages=" + errorMessages + ", specificErrors=" + specificErrors
+//                + ", errorAvailable=" + errorAvailable + "]";
+//    }
 
 }

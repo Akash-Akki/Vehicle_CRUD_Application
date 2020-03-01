@@ -24,9 +24,9 @@ public class VehicleService {
 
     public List<Vehicle> getVehicles(HashMap<String, String> requestParam) throws  VehiclesNotFoundException {
         List<Vehicle> vehicleList = new ArrayList<>();
-        if(requestParam.containsKey("make"))
-            vehicleList  = vehicleRepository.findByMakeAllIgnoreCase(requestParam.get("make"));
-       else if(requestParam.containsKey("model"))
+        if(requestParam.containsKey("make")) {
+            vehicleList = vehicleRepository.findByMakeAllIgnoreCase(requestParam.get("make"));
+        }else if(requestParam.containsKey("model"))
            vehicleList = vehicleRepository.findByModelAllIgnoreCase(requestParam.get("model"));
        else
            vehicleList= (List<Vehicle>) vehicleRepository.findAll();

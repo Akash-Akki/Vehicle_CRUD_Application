@@ -26,8 +26,8 @@ public class InputValidationException extends RuntimeException {
         return errors;
     }
 
-    public void setErrors(ValidationErrors errors) {
-        this.errors = errors;
-    }
+//    public void setErrors(ValidationErrors errors) {
+//        this.errors = errors;
+//    }
 
 }

@@ -54,7 +54,8 @@ public class VehicleController {
     public ResponseEntity getVehicles(@RequestParam HashMap <String,String> requestParam ) throws  VehiclesNotFoundException {
         List<Vehicle> vehiclesList = new ArrayList<Vehicle>();
         vehiclesList = vehicleService.getVehicles(requestParam);
-            if (vehiclesList==null || vehiclesList.size()==0)
+        System.out.println("herereeerer");
+        if (vehiclesList==null || vehiclesList.size()==0)
                throw new VehiclesNotFoundException("No Vehicles found");
         return new ResponseEntity<List<Vehicle>>(vehiclesList,HttpStatus.OK);
 
@@ -63,10 +64,8 @@ public class VehicleController {
     @GetMapping(value="/vehicles/{Id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public  ResponseEntity getVehicleById(@PathVariable("Id") int Id) throws VehicleNotFoundException {
          Optional<Vehicle> vehicleById= vehicleService.getVehicleById(Id);
+
            System.out.println("vehcile"+vehicleById);
-          if(!vehicleById.isPresent()) {
-              throw new VehicleNotFoundException();
-          }
          return  new ResponseEntity<Optional<Vehicle>>(vehicleById,HttpStatus.OK);
     }
 
@@ -80,7 +79,8 @@ public class VehicleController {
     }
 
     @PutMapping(value = "/vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateVehicle(@Valid @RequestBody Vehicle vehicle) throws InputValidationException, VehicleNotFoundException {
+    public ResponseEntity updateVehicle(@RequestBody Vehicle vehicle) throws InputValidationException, VehicleNotFoundException {
+        vehicleValidator.validForUpdate(vehicle);
         Vehicle vehicleObject = vehicleService.updateVehicles(vehicle);
         return new ResponseEntity<Vehicle>(vehicleObject,HttpStatus.CREATED);
     }
