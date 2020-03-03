@@ -29,9 +29,11 @@ public class VehicleValidator  {
     }
 
         public void validateForCreate (Vehicle vehicle) throws InputValidationException {
-             System.out.println("here");
+             //System.out.println("here");
               baseValidator(vehicle);
         }
+
+
 
         private void baseValidator(Vehicle vehicle){
             ValidationErrors errors = new ValidationErrors();
@@ -48,5 +50,5 @@ public class VehicleValidator  {
         }
 
 
-    }
+}
 
