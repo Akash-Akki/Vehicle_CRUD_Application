@@ -2,24 +2,29 @@ package com.mitchell_international.VehicleApplication.model;
 
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
+
+/**
+ *    Object to transfer {@link Vehicle} entity details between Controller and Service layer and
+ *    Object that used to persist in the database
+ *
+ */
 @Entity
 @Table(name="Vehicle")
 public class Vehicle implements Serializable {
 
 
     @Id
-    private int Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="Id")
+    private int id;
 
     @Column(name="Year")
     @Range(min = 1951,max=2049)
-    private  int Year;
+    private  int year;
 
     @Column(name="Make")
     @NotEmpty
@@ -30,8 +35,8 @@ public class Vehicle implements Serializable {
     private String model;
 
     public Vehicle(int id, int year, String make, String model) {
-        this.Id =id;
-        this.Year=year;
+        this.id =id;
+        this.year =year;
         this.make=make;
         this.model =model;
     }
@@ -41,19 +46,19 @@ public class Vehicle implements Serializable {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public int getYear() {
-        return Year;
+        return year;
     }
 
     public void setYear(int year) {
-        Year = year;
+        this.year = year;
     }
 
     public String getMake() {

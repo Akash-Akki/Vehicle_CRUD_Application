@@ -1,81 +1,68 @@
 package com.mitchell_international.VehicleApplication.service;
 
-
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mitchell_international.VehicleApplication.Exception.VehicleNotFoundException;
 import com.mitchell_international.VehicleApplication.Exception.VehiclesNotFoundException;
-import com.mitchell_international.VehicleApplication.repository.VehicleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import  com.mitchell_international.VehicleApplication.model.Vehicle;
-import java.util.ArrayList;
+import com.mitchell_international.VehicleApplication.model.Vehicle;
+
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-
-@Service
-public class VehicleService {
-
-    @Autowired
-    VehicleRepository vehicleRepository;
 
 
 
-    public List<Vehicle> getVehicles(HashMap<String, String> requestParam) throws  VehiclesNotFoundException {
-        List<Vehicle> vehicleList = new ArrayList<>();
-        if(requestParam.containsKey("make")) {
-            vehicleList = vehicleRepository.findByMakeAllIgnoreCase(requestParam.get("make"));
-        }else if(requestParam.containsKey("model"))
-           vehicleList = vehicleRepository.findByModelAllIgnoreCase(requestParam.get("model"));
-       else
-           vehicleList= (List<Vehicle>) vehicleRepository.findAll();
-
-        if(vehicleList==null)
-            throw new VehiclesNotFoundException("No Vehicles found");
-
-        return vehicleList;
-    }
-
-    public Optional<Vehicle> getVehicleById(int id) throws VehicleNotFoundException{
-
-        Optional<Vehicle> vehicleById = vehicleRepository.findById(id);
-
-       if(!vehicleById.isPresent())
-           throw new  VehicleNotFoundException("vehicle with id " + id+" not found");
-
-        return vehicleById;
-    }
-
-    public Vehicle createVehicles(Vehicle vehicle) {
-        Vehicle entity = vehicleRepository.save(vehicle);
-        return entity;
-
-    }
 
 
 
-    public Vehicle updateVehicles(Vehicle vehicle) throws VehicleNotFoundException {
+/**
+ * Service interface used by REST layer to working with Vehicle entity. Any implementation which will
+ * work on Vehicle entity has to implement this interface. This interface exposes methods to create,
+ * update, retrieve, delete and list Vehicles.
+ *
+ * @author Akash Akki
+ *
+ */
+public interface VehicleService {
 
-        Optional<Vehicle> vehicleById = vehicleRepository.findById(vehicle.getId());
-        if(!vehicleById.isPresent()) {
-            throw new VehicleNotFoundException("Vehicle with id " + vehicle.getId() + " Not found");
-        }
-          vehicleById.get().setMake(vehicle.getMake());
-          vehicleById.get().setYear(vehicle.getYear());
-          vehicleById.get().setModel(vehicle.getModel());
-        Vehicle updatedEntity=vehicleRepository.save(vehicleById.get());
-        return updatedEntity;
 
-    }
+    /**
+     *
+     * @param requestParam request param taking attribute and value
+     * @return List of Vehicles
+     * @throws VehiclesNotFoundException
+     */
+    public List<Vehicle> getVehicles(HashMap<String,String> requestParam) throws VehiclesNotFoundException;
 
-    public void deleteVehiclesById(int id) throws VehicleNotFoundException {
-        Optional<Vehicle> vehicleById = vehicleRepository.findById(id);
-        if(vehicleById.isPresent())
-            vehicleRepository.deleteById(id);
-        else {
-            throw new VehicleNotFoundException("Vehicle with this id " + id + " not found");
-        }
 
-    }
+    /**
+     * Method to retrieve Vehicle based on the primary key of Vehicle
+     *
+     * @param id - primary key of Vehicle
+     *@return {@link Vehicle} which contains data persisted
+     */
+    public Vehicle getVehicleById(int id) throws VehicleNotFoundException;
+
+    /**
+     * Method to create Vehicle. Input details from external system is sent as {@link Vehicle}
+     *
+     * @param  - {@link Vehicle} which contains input details
+     * @return {@link Vehicle} which contains primary key details of created Vehicle
+     */
+    public Vehicle createVehicles(Vehicle vehicle);
+
+    /**
+     *
+     * Method to update Vehicle. Input details from external system is sent as {@link Vehicle}
+     * @param  - {@link Vehicle} which contains input details
+     * @return {@link Vehicle} which contains updated data that is persisted
+     */
+    public Vehicle updateVehicles(Vehicle vehicle) throws VehicleNotFoundException;
+
+
+
+    /**
+     *
+     * Method to delete a Vehicle identified by primary key of Vehicle provided in id attribute
+     * @param id - primary key of Vehicle.
+     */
+    public void deleteVehiclesById(int id) throws VehicleNotFoundException;
+
 }

@@ -1,14 +1,9 @@
 package com.mitchell_international.VehicleApplication.controller;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
 import com.mitchell_international.VehicleApplication.Exception.VehiclesNotFoundException;
 import com.mitchell_international.VehicleApplication.VehicleApplication;
 import com.mitchell_international.VehicleApplication.model.Vehicle;
-import com.mitchell_international.VehicleApplication.repository.VehicleRepository;
-import com.mitchell_international.VehicleApplication.service.VehicleService;
+import com.mitchell_international.VehicleApplication.service.Implementation.VehicleServiceImplementation;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -27,8 +22,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,7 +46,7 @@ public class VehicleControllerTest {
     VehicleController vehicleController;
 
     @Mock
-    VehicleService vehicleService;
+    VehicleServiceImplementation vehicleServiceImplmentation;
 
     @Before
     public void setup() {
@@ -70,7 +69,7 @@ public class VehicleControllerTest {
          VehiclesNotFoundException vehiclesNotFoundException = new VehiclesNotFoundException("No Vehicle Found");
         HashMap<String,String> requestParam = new HashMap<>();
 
-        when(vehicleService.getVehicles(requestParam)).thenThrow(vehiclesNotFoundException);
+        when(vehicleServiceImplmentation.getVehicles(requestParam)).thenThrow(vehiclesNotFoundException);
         mockMvc.perform(MockMvcRequestBuilders.get("/vehicles").accept(MediaType.APPLICATION_JSON))
 //                .andExpect(jsonPath("$.errorCode").exists())
 //                .andExpect(jsonPath("$.message").exists())

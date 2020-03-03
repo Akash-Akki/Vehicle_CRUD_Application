@@ -1,15 +1,13 @@
 package com.mitchell_international.VehicleApplication.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.mitchell_international.VehicleApplication.Exception.VehicleNotFoundException;
 import com.mitchell_international.VehicleApplication.Exception.VehiclesNotFoundException;
 import com.mitchell_international.VehicleApplication.model.Vehicle;
 import com.mitchell_international.VehicleApplication.repository.VehicleRepository;
+import com.mitchell_international.VehicleApplication.service.Implementation.VehicleServiceImplementation;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,12 +19,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class VehicleServiceTest {
+public class VehicleServiceImplementationTest {
 
     @InjectMocks
-    VehicleService vehicleService;
+    VehicleServiceImplementation vehicleServiceImplmentation;
 
     @Mock
     VehicleRepository vehicleRepository;
@@ -45,7 +46,7 @@ public class VehicleServiceTest {
        vehicle.setMake("MercedesBenz");
        when(vehicleRepository.save(vehicle)).thenReturn(vehicle);
 
-       Vehicle vehicleEntity = vehicleService.createVehicles(vehicle);
+       Vehicle vehicleEntity = vehicleServiceImplmentation.createVehicles(vehicle);
 
        assertEquals(vehicle.getId(),vehicleEntity.getId());
        assertEquals(vehicle.getMake(),vehicleEntity.getMake());
@@ -63,13 +64,13 @@ public class VehicleServiceTest {
 
          when(vehicleRepository.findById(1)).thenReturn(java.util.Optional.of(vehicle));
 
-         Optional<Vehicle> vehicleObject=vehicleService.getVehicleById(1);
+         Vehicle vehicleObject= vehicleServiceImplmentation.getVehicleById(1);
 
 
-       assertEquals(1,vehicleObject.get().getId()) ;
-       assertEquals(2018,vehicleObject.get().getYear());
-       assertEquals("GClass",vehicleObject.get().getModel());
-       assertEquals("MercedesBenz",vehicleObject.get().getMake());
+       assertEquals(1,vehicleObject.getId()) ;
+       assertEquals(2018,vehicleObject.getYear());
+       assertEquals("GClass",vehicleObject.getModel());
+       assertEquals("MercedesBenz",vehicleObject.getMake());
     }
 
 
@@ -78,7 +79,7 @@ public class VehicleServiceTest {
         Vehicle vehicle = new Vehicle(1,2018,"MercedesBenz","GClass");
         when(vehicleRepository.findById(1)).thenReturn(Optional.empty());
            try{
-               vehicleService.getVehicleById(1);
+               vehicleServiceImplmentation.getVehicleById(1);
            } catch (VehicleNotFoundException e) {
                assertEquals("vehicle with id 1 not found",e.getMessage());
            }
@@ -96,7 +97,7 @@ public class VehicleServiceTest {
         vehicleList.add(new Vehicle(2, 2020, "Audi", "Q6"));
         vehicleList.add(new Vehicle(3, 2019, "Toyota", "Etios"));
         when(vehicleRepository.findAll()).thenReturn(vehicleList);
-        List<Vehicle> vehicleObjectList = vehicleService.getVehicles(requestParam);
+        List<Vehicle> vehicleObjectList = vehicleServiceImplmentation.getVehicles(requestParam);
         assertEquals(vehicleList.size(), vehicleObjectList.size());
     }
 
@@ -110,7 +111,7 @@ public class VehicleServiceTest {
         HashMap<String,String> requestParam = new HashMap<>();
 
         when(vehicleRepository.findAll()).thenReturn(vehicleList);
-        List<Vehicle> vehicleObjectList = vehicleService.getVehicles((requestParam));
+        List<Vehicle> vehicleObjectList = vehicleServiceImplmentation.getVehicles((requestParam));
         assertEquals(vehicleList.size(),vehicleObjectList.size());
 
     }
@@ -124,7 +125,7 @@ public class VehicleServiceTest {
         HashMap<String,String> requestParam = new HashMap<>();
         requestParam.put("model","SClass");
         when(vehicleRepository.findByModelAllIgnoreCase(requestParam.get("model"))).thenReturn(vehicleList);
-        List<Vehicle> vehicleObjectList = vehicleService.getVehicles(requestParam);
+        List<Vehicle> vehicleObjectList = vehicleServiceImplmentation.getVehicles(requestParam);
         assertEquals(vehicleList.size(),vehicleObjectList.size());
     }
     @Test
@@ -138,7 +139,7 @@ public class VehicleServiceTest {
 
         when(vehicleRepository.findByMakeAllIgnoreCase(requestParam.get("make"))).thenReturn(vehicleList);
 
-        List<Vehicle> vehicleObjectList = vehicleService.getVehicles(requestParam);
+        List<Vehicle> vehicleObjectList = vehicleServiceImplmentation.getVehicles(requestParam);
         System.out.println("size is  "+vehicleObjectList.size());
         assertEquals(1,vehicleObjectList.size());
 
@@ -150,7 +151,7 @@ public class VehicleServiceTest {
         HashMap<String,String> hashMap = new HashMap<>();
         when(vehicleRepository.findAll()).thenReturn(vehicleList);
         try{
-            List<Vehicle> vehicles = vehicleService.getVehicles(hashMap);
+            List<Vehicle> vehicles = vehicleServiceImplmentation.getVehicles(hashMap);
         }
         catch (  VehiclesNotFoundException e){
             assertEquals("No Vehicles found",e.getMessage());
@@ -164,7 +165,7 @@ public class VehicleServiceTest {
         vehicle.setYear(2019);
         vehicle.setModel("EClass");
         when(vehicleRepository.save(vehicle)).thenReturn(vehicle);
-        Vehicle vehcileEntity = vehicleService.updateVehicles(vehicle);
+        Vehicle vehcileEntity = vehicleServiceImplmentation.updateVehicles(vehicle);
         assertEquals(vehicle.getId(),vehcileEntity.getId());
         assertEquals(vehicle.getModel(),vehcileEntity.getModel());
     }
@@ -175,7 +176,7 @@ public class VehicleServiceTest {
         vehicle.setId(1);
         when(vehicleRepository.findById(1)).thenReturn(Optional.empty());
         try {
-            vehicleService.updateVehicles(vehicle);
+            vehicleServiceImplmentation.updateVehicles(vehicle);
         } catch (VehicleNotFoundException e) {
             assertEquals("Vehicle with id 1 Not found", e.getMessage());
         }
@@ -187,7 +188,7 @@ public class VehicleServiceTest {
         vehicle.setId(1);
         vehicle.setMake("MercedesBenz");
         when(vehicleRepository.findById(1)).thenReturn(java.util.Optional.of(vehicle));
-        vehicleService.deleteVehiclesById(1);
+        vehicleServiceImplmentation.deleteVehiclesById(1);
         verify(vehicleRepository, times(1)).deleteById(1);
     }
 
@@ -198,7 +199,7 @@ public class VehicleServiceTest {
         vehicle.setMake("MerecedesBenz");
         when(vehicleRepository.findById(1)).thenReturn(Optional.empty());
         try {
-            vehicleService.deleteVehiclesById(vehicle.getId());
+            vehicleServiceImplmentation.deleteVehiclesById(vehicle.getId());
         }
         catch(VehicleNotFoundException e) {
              assertEquals("Vehicle with this id 1 not found",e.getMessage());

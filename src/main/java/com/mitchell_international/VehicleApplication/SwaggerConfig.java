@@ -1,9 +1,7 @@
-package com.daimler;
+package com.mitchell_international.VehicleApplication;
 
-import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -11,6 +9,8 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
@@ -20,7 +20,7 @@ public class SwaggerConfig {
     public Docket productApi() {
         return new Docket(DocumentationType.SWAGGER_2)
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.daimler"))
+            .apis(RequestHandlerSelectors.basePackage("com.mitchell_international.VehicleApplication"))
             .paths(PathSelectors.any())
             .build()
             .useDefaultResponseMessages(false)
@@ -29,11 +29,11 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-            "Massnahmen API",
-            "The Massnahmen API provides access to the massnahmen (todo) services",
+            "Vehilce Application API",
+            "The Vehicle API provides access to the vehicle CRUD services (vehicle) services",
             "0.1",
             "",
-            new Contact("Markovic Oliver", null, "oliver.markovic@daimler.com") {},
+            new Contact("Akash Akki", null, "apa190001@utdallas.edu") {},
             null,
             null,
             Collections.emptyList());

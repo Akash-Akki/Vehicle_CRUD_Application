@@ -1,5 +1,10 @@
 package com.mitchell_international.VehicleApplication.Exception;
 
+/**
+ *  DTO class to encapsulate error message which needs to be sent to user
+ *
+ * @author  Akash Akki
+ */
 public class ErrorResponse {
 
     private int errorCode;

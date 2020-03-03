@@ -1,14 +1,15 @@
 package com.mitchell_international.VehicleApplication.Exception;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * DTO class to encapsulate error message which needs to be sent to external system
+ * DTO class to encapsulate error message which needs to be sent {@link ErrorResponse}
  *
  * @author Akash Akki
  *
@@ -18,8 +19,7 @@ public class ValidationErrors implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * List of business error message, which does not corresponds to any specific field in the input
-     * from external system
+     * List of error message
      */
     private List<String> errorMessages = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class ValidationErrors implements Serializable {
     private Map<String, String> specificErrors = new HashMap<>();
 
     /**
-     * boolean to indicate whether DTO contains error message. Default value is false. This will be
+     * boolean to indicate whether Entity contains error message. Default value is false. This will be
      * true if either errorMessage List or specificErrors Map is not empty, false otherwise
      */
     @JsonIgnore
@@ -40,22 +40,12 @@ public class ValidationErrors implements Serializable {
         return errorMessages;
     }
 
-//    public void setErrorMessages(List<String> errorMessages) {
-//        this.errorMessages = errorMessages;
-//    }
+
 
     public Map<String, String> getSpecificErrors() {
         return specificErrors;
     }
 
-//    public void setSpecificErrors(Map<String, String> errors) {
-//        this.specificErrors = errors;
-//    }
-
-//    public void addErrorMessage(String error) {
-//        this.errorAvailable = true;
-//        this.errorMessages.add(error);
-//    }
 
     public void addSpecificError(String key, String value) {
         this.errorAvailable = true;
@@ -70,10 +60,10 @@ public class ValidationErrors implements Serializable {
         this.errorAvailable = errorAvailable;
     }
 
-//    @Override
-//    public String toString() {
-//        return "ValidationErrors [errorMessages=" + errorMessages + ", specificErrors=" + specificErrors
-//                + ", errorAvailable=" + errorAvailable + "]";
-//    }
+   @Override
+    public String toString() {
+        return "ValidationErrors [errorMessages=" + errorMessages + ", specificErrors=" + specificErrors
+                + ", errorAvailable=" + errorAvailable + "]";
+    }
 
 }

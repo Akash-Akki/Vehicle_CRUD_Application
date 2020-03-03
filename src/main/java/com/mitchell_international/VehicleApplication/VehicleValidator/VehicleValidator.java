@@ -6,9 +6,28 @@ import com.mitchell_international.VehicleApplication.model.Vehicle;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+/**
+ * Validator component to validate Vehicle attributes for different operations like create,
+ * update.
+ *
+ * @author Akash Akki
+ *
+ */
+
+
 @Component
 public class VehicleValidator  {
 
+
+
+
+    /**
+     * Method to validate data in {@link Vehicle}, while updating it. Validation error details are
+     * wrapped and sent across through {@link ValidationErrors} and {@link InputValidationException}
+     *
+     * @param  - {@link Vehicle} containing details which needs to be updated
+     * @throws InputValidationException
+     */
     public void validForUpdate(Vehicle vehicle) throws InputValidationException {
         ValidationErrors validationErrors = new ValidationErrors();
         if (StringUtils.isEmpty(vehicle.getId())) {
@@ -28,14 +47,29 @@ public class VehicleValidator  {
         }
     }
 
+
+    /**
+     *  Method to validate data in {@link Vehicle}, while creating it. Validation error details are
+     *   wrapped and sent across through {@link ValidationErrors} and {@link InputValidationException}
+     *
+     * @param vehicle - {@link Vehicle} containing details which needs to be created
+     * @throws InputValidationException
+     */
         public void validateForCreate (Vehicle vehicle) throws InputValidationException {
-             //System.out.println("here");
               baseValidator(vehicle);
         }
 
 
-
-        private void baseValidator(Vehicle vehicle){
+    /**
+     *     Base method used by {@link VehicleValidator#validateForCreate(Vehicle)} and
+     *     {@link Vehicle# validateForUpdate(Vehicle)}. This contains common validations which needs
+     *    to be done for both the method
+     *     @param  - {@link Vehicle} containing details which needs to be updated
+     *     @throws InputValidationException
+     *
+     * @param vehicle
+    */
+    private void baseValidator(Vehicle vehicle) throws InputValidationException {
             ValidationErrors errors = new ValidationErrors();
             if (StringUtils.isEmpty(vehicle.getModel()))
                 errors.addSpecificError("model", "Model is required");
