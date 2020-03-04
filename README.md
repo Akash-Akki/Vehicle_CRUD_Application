@@ -4,15 +4,17 @@ Github link: https://github.com/Akash-Akki/Vehicle-Application
 
 Instructions to Run Vehicle Application
   
-
+1. Please find the Jar file in the current folder under the name VehicalApplicaiton Jar
   Run Jar File VehicleApplication-0.0.1-SNAPSHOT using below command
 
       java -jar VehicleApplication-0.0.1-SNAPSHOT.jar com.mitchell_international.VehicleApplication.VehicleApplication
 	  
 	  Or 
 	  
-	  
-	  
+     Create a Spring Boot Project in any of the code and copy the below source code
+     
+   
+2. Please find the TestResults.html to find the Junit Test results of the application.	  
   
     
   
