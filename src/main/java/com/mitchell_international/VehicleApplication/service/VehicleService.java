@@ -3,14 +3,8 @@ package com.mitchell_international.VehicleApplication.service;
 import com.mitchell_international.VehicleApplication.Exception.VehicleNotFoundException;
 import com.mitchell_international.VehicleApplication.Exception.VehiclesNotFoundException;
 import com.mitchell_international.VehicleApplication.model.Vehicle;
-
 import java.util.HashMap;
 import java.util.List;
-
-
-
-
-
 
 /**
  * Service interface used by REST layer to working with Vehicle entity. Any implementation which will
@@ -21,6 +15,7 @@ import java.util.List;
  *
  */
 public interface VehicleService {
+
 
 
     /**

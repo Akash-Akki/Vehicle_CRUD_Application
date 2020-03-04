@@ -1,7 +1,4 @@
-/**
- * @author Akash Akki
- *
- */
+
 
 package com.mitchell_international.VehicleApplication.controller;
 
@@ -24,30 +21,19 @@ import java.util.HashMap;
 import java.util.List;
 
 /*    TODO
-*  TodoService Interface
-*
-* 
-*
-*
-* junits modification
-* and then see about validation errors and input validation exception.
-  Refactor code
-  See about component creating two models
-  update meaningful variable and method names
-  add google styling
-  validation
-  Make datasamples to store it in tempororary files
-  Add Java Docs
 
+  update meaningful variable and method names
+  Make datasamples to store it in tempororary files
+*/
 
 /**
  * Controller class which handles all the REST endpoint for Vehicle entity
- *
  * @author Akash Akki
  *
  */
 @RestController
 @Api(value = "VehicleApplication", description = "Operations pertaining to Vehicle Application")
+@RequestMapping(value="/vehicles")
 public class VehicleController {
 
     /**
@@ -70,7 +56,7 @@ public class VehicleController {
      * @return  List Of Vehicles in the form of json.
      * @throws VehiclesNotFoundException
      */
-    @GetMapping(value="/vehicles" , produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="" , produces=MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "View all the vehicles")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "json containing vehicles")})
     public ResponseEntity getVehicles(@ApiParam @RequestParam(required=false) HashMap <String,String> requestParam ) throws  VehiclesNotFoundException {
@@ -89,7 +75,7 @@ public class VehicleController {
      * @return Vehicle Object in the form of json
      * @throws VehicleNotFoundException
      */
-    @GetMapping(value="/vehicles/{Id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="{Id}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Search a vehicle based on id (primary key)")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "produces a json "),
             @ApiResponse(code = 404, message = "Vehicle with specified id not found")})
@@ -107,7 +93,7 @@ public class VehicleController {
      * @return created Vehicle Object
      * @throws InputValidationException
      */
-    @PostMapping(value = "/vehicles",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ApiOperation(value = "Add a Vehicle")
     @ApiResponses(value = {@ApiResponse(code = 201, message = "json returning the created vehicle"),
@@ -131,7 +117,7 @@ public class VehicleController {
      * @throws InputValidationException
      * @throws VehicleNotFoundException
      */
-    @PutMapping(value = "/vehicles" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "" ,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = " Update a Vehicle based on id (primary key)")
     @ApiResponses(value = {@ApiResponse(code = 201, message = "json containing updated list of vehicle"),
             @ApiResponse(code = 400, message = "Model is required,Make is required and \" +\n" +
@@ -150,7 +136,7 @@ public class VehicleController {
      * @return no content
      * @throws VehicleNotFoundException
      */
-    @DeleteMapping(value = "/vehicles/{Id}")
+    @DeleteMapping(value = "{Id}")
     @ApiOperation(value = "Delete a Vehicle to based on id(primary key) and application id")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Vehicle has been deleted"),
             @ApiResponse(code = 404, message = "The Vehicle with specfied id not found"),
