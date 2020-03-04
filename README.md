@@ -11,8 +11,13 @@ Instructions to Run Vehicle Application
 	  
 	  Or 
 	  
-     Create a Spring Boot Project in any of the code and copy the below source code
-     
+    Download and extract the source code.   
+    Create a Spring Boot Project in any of the IDE.
+    Copy the above extracted source code in the project 
+    Run the project
+    
+    Using Postman we can see the results of the APIs.
+    Sample Input and Sample Output are given below.
    
 2. Please find the TestResults.html to find the Junit Test results of the application.	  
   
